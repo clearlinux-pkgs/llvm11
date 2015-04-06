@@ -1,0 +1,24 @@
+From 3d52a3cb862c9244d436e76ef4e16a1aa7975c35 Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Wed, 2 Feb 2022 11:16:28 -0800
+Subject: [PATCH] add missing <limits> inclusion
+
+---
+ utils/benchmark/src/benchmark_register.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/utils/benchmark/src/benchmark_register.h b/utils/benchmark/src/benchmark_register.h
+index 0705e219..4caa5ad4 100644
+--- a/utils/benchmark/src/benchmark_register.h
++++ b/utils/benchmark/src/benchmark_register.h
+@@ -1,6 +1,7 @@
+ #ifndef BENCHMARK_REGISTER_H
+ #define BENCHMARK_REGISTER_H
+ 
++#include <limits>
+ #include <vector>
+ 
+ #include "check.h"
+-- 
+2.34.1
+

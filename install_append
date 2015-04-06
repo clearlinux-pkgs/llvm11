@@ -1,0 +1,40 @@
+# -*- sh -*-
+# Rename the Gold plugin elsewhere, as we're erasing *.so below
+mv %{buildroot}/usr/lib64/LLVMgold.so %{buildroot}/usr/lib64/LLVMgold.so.save
+
+# Remove files that should come from the main llvm package
+rm -rf %{buildroot}/usr/include
+rm -rf %{buildroot}/usr/lib64/*.a
+rm -rf %{buildroot}/usr/lib64/*.so
+rm -rf %{buildroot}/usr/lib64/cmake
+rm -rf %{buildroot}/usr/lib64/pkgconfig
+rm -rf %{buildroot}/usr/libexec
+
+mv %{buildroot}/usr/share/package-licenses %{buildroot}/usr/
+rm -rf %{buildroot}/usr/share/*
+mv %{buildroot}/usr/package-licenses %{buildroot}/usr/share
+
+# Rename the tools to have a versioned suffix and symlink back
+pushd %{buildroot}/usr
+FULL_VERSION=%{version}
+VERSION=${FULL_VERSION%%%%.*}
+mkdir -p lib64/clang/$FULL_VERSION/bin
+mv bin/* lib64/clang/$FULL_VERSION/bin
+for f in lib64/clang/$FULL_VERSION/bin/*; do
+    case "$f" in
+        *-$VERSION)
+            # Already versioned, leave it alone
+            continue
+            ;;
+    esac
+    ln -s ../$f bin/${f##*/}-$VERSION
+done
+
+# libclang-cpp auto-relocates, so create a symlink so it finds its files
+ln -s ../.. lib64/clang/$FULL_VERSION/lib64
+
+# Put the LLVM gold plugin back, under the versioned name
+mv lib64/LLVMgold.so.save lib64/LLVMgold-$VERSION.so
+mkdir -p lib/bfd-plugins
+ln -s ../../lib64/LLVMgold-$VERSION.so lib/bfd-plugins
+popd

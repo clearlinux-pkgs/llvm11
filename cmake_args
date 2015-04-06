@@ -1,0 +1,48 @@
+# -*- sh -*-
+# Remove linker flags and -Wp,-D_FORTIFY_SOURCE=2 from CFLAGS & CXXFLAGS
+-DCMAKE_C_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CFLAGS`"
+-DCMAKE_CXX_FLAGS="`sed -E 's/-Wl,\S+\s//g; s/-Wp,-D_FORTIFY_SOURCE=2//' <<<$CXXFLAGS`"
+
+# Enable build-IDs, or RPM will complain:
+#  *** ERROR: No build ID note found in /builddir/build/BUILDROOT/llvm-7.0.0-73.x86_64/usr/bin/llvm-lto
+# and bring back the rest of Clear's linker options
+-DCMAKE_EXE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1"
+-DCMAKE_MODULE_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1"
+-DCMAKE_SHARED_LINKER_FLAGS="$CXXFLAGS -Wl,--as-needed -Wl,--build-id=sha1"
+-DENABLE_LINKER_BUILD_ID=ON
+
+# Disable the tons of libraries from LLVM.
+# We only need libLLVM.so.X
+-DBUILD_SHARED_LIBS:BOOL=OFF
+# And make the tools link to it
+-DLLVM_LINK_LLVM_DYLIB:BOOL=ON
+# Ditto for libclang.so and libclang-cpp.so
+-DCLANG_LINK_CLANG_DYLIB:BOOL=ON
+
+# General options
+-DLLVM_BUILD_RUNTIME:BOOL=ON
+-DLLVM_BUILD_TOOLS:BOOL=ON
+-DLLVM_ENABLE_CXX1Y=ON
+-DLLVM_ENABLE_FFI:BOOL=ON -DFFI_INCLUDE_DIR=`pkg-config --variable=includedir libffi`
+-DLLVM_ENABLE_LIBCXX:BOOL=OFF
+-DLLVM_ENABLE_RTTI:BOOL=ON
+-DLLVM_ENABLE_ZLIB:BOOL=ON
+-DLLVM_INSTALL_UTILS:BOOL=OFF
+-DLLVM_REQUIRES_RTTI:BOOL=ON
+-DLLVM_TABLEGEN=$LLVM_TABLEGEN
+-DCLANG_TABLEGEN=$CLANG_TABLEGEN
+-DLLVM_SPIRV_BUILD_EXTERNAL:BOOL=ON
+
+# Distro choices
+-DLLVM_LIBDIR_SUFFIX=64
+-DLLVM_BINUTILS_INCDIR=/usr/include
+-DLLVM_HOST_TRIPLE="x86_64-generic-linux"
+-DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
+
+# Options for compat package
+-DCLANG_TOOL_SCAN_VIEW_BUILD:BOOL=OFF
+-DCLANG_TOOL_SCAN_BUILD_BUILD:BOOL=OFF
+-DLLVM_TOOL_OPT_VIEWER_BUILD:BOOL=OFF
+-DLLVM_INSTALL_UTILS:BOOL=OFF
+-DCMAKE_C_COMPILER=clang-13
+-DCMAKE_CXX_COMPILER=clang++-13

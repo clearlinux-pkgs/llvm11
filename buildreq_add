@@ -1,0 +1,17 @@
+# This file contains additional build requirements that did not get
+# picked up automatically. One name per line, no whitespace.
+pypi(sphinx)
+Z3-dev
+Z3-dev32
+binutils-dev
+elfutils-dev
+googletest-dev
+libffi-dev
+libffi-dev32
+libstdc++-dev
+libxml2-dev32
+ncurses-dev
+python3-dev
+valgrind-dev
+zlib-dev
+zlib-dev32
