@@ -7,7 +7,7 @@
 %define keepstatic 1
 Name     : llvm11
 Version  : 11.1.0
-Release  : 131
+Release  : 132
 URL      : https://github.com/llvm/llvm-project/releases/download/llvmorg-11.1.0/llvm-11.1.0.src.tar.xz
 Source0  : https://github.com/llvm/llvm-project/releases/download/llvmorg-11.1.0/llvm-11.1.0.src.tar.xz
 Source1  : https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/bf7d21f9f4220643335d13117f3d601692093a96/SPIRV-11.1.0.tar.gz
@@ -28,7 +28,6 @@ BuildRequires : Z3-dev32
 BuildRequires : binutils-dev
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-distutils3
-BuildRequires : buildreq-golang
 BuildRequires : doxygen
 BuildRequires : elfutils-dev
 BuildRequires : git
@@ -219,7 +218,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1643846893
+export SOURCE_DATE_EPOCH=1647647080
 unset LD_AS_NEEDED
 mkdir -p clr-build
 pushd clr-build
@@ -281,7 +280,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make test
 
 %install
-export SOURCE_DATE_EPOCH=1643846893
+export SOURCE_DATE_EPOCH=1647647080
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/llvm11
 cp %{_builddir}/SPIRV-LLVM-Translator-bf7d21f9f4220643335d13117f3d601692093a96/LICENSE.TXT %{buildroot}/usr/share/package-licenses/llvm11/8f178caf2a2d6e6c711a30da69077572df356cf6
